@@ -14,7 +14,7 @@ import { GuidedTour } from "@/components/onboarding/GuidedTour";
 import { LiveCallHost } from "@/components/LiveCallHost";
 import { ThreadRefsProvider } from "@/components/ThreadRefs";
 import { useAppLoadSignal } from "@/lib/app-load";
-import { cloudAccountBridge, openCloudOnWeb } from "@/lib/cloud-add-web";
+import { cloudAccountBridge } from "@/lib/cloud-add-web";
 import { parseComputerHelp } from "@/lib/computer-control";
 import { viewerClosedRelease } from "@/components/computer-takeover";
 import { Sidebar } from "@/components/Sidebar";
@@ -168,11 +168,9 @@ function Shell({ viewer }: { viewer: WelcomeViewer | null }) {
   // Stays mounted once opened: a Cloud bought in it can arrive after the sheet is closed.
   const cloudAddOpened = useRef(false);
   cloudAddOpened.current ||= Boolean(state.cloudAdd && cloudAccountBridge());
-  // A layout effect runs inside the tap that asked, so a browser lets it open a tab.
+  // Without the desktop's Cloud sign-in there is nowhere to add a Cloud: the request ends here.
   useLayoutEffect(() => {
-    if (!state.cloudAdd || cloudAccountBridge()) return;
-    openCloudOnWeb(state.cloudAdd, { cloudHome: state.config?.cloudHome === true, teamCloudPage: state.config?.team?.cloudPage });
-    dispatch({ type: "closeCloudAdd" });
+    if (state.cloudAdd && !cloudAccountBridge()) dispatch({ type: "closeCloudAdd" });
   }, [state.cloudAdd]);
   const [localVmWorkspaceBotId, setLocalVmWorkspaceBotId] = useState<string | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);

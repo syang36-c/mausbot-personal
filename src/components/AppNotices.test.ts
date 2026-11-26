@@ -1954,26 +1954,14 @@ describe("the Teams What's new", () => {
     await keptForGood();
   });
 
-  it("a Team Cloud's member in a browser: Got it, and nothing to sell", async () => {
+  it("never in a browser, where no desktop sells MausBot Cloud: not a Team Cloud's member, nor a personal Cloud's page", async () => {
     onTeamCloud("member", "browser");
-    const html = await launch();
-    expect(html).toContain(TITLE); expect(html).toContain("Got it");
-    for (const gone of ["Invite your team", "Start a team", "Not now"]) expect(html).not.toContain(gone);
-    press("Got it"); await flush();
-    expect(steps()).toContain("seen"); expect(steps().filter(step => step !== "seen")).toEqual(["got_it"]);
-    expect(wrote("/api/me/welcome")).toEqual([{ hints: [TEAMS_NOTICE] }]);
-    await keptForGood();
-  });
-
-  it("everyone else in a browser, a personal Cloud's page included: Start a team on the website; × closes it for good", async () => {
+    expect(await launch()).not.toContain(TITLE);
     vi.stubGlobal("window", { addEventListener: vi.fn(), removeEventListener: vi.fn(), open: vi.fn() });
     viewer = { hosted: true, canSave: true, cloudHome: true };
     f.state.config = { ...f.state.config, cloudHome: true, onboarding: { ...f.state.config.onboarding, hintsSeen: [...hints(), CLOUD_WELCOME_DONE] } };
-    const html = await launch();
-    expect(html).toContain("Start a team"); expect(html).toContain("Not now");
-    press("Close"); await flush();
-    expect(steps().at(-1)).toBe("close");
-    await keptForGood();
+    expect(await relaunch()).not.toContain(TITLE);
+    expect(steps()).toEqual([]);
   });
 
   it("never on a branded build, nor a desktop an organization runs", async () => {
