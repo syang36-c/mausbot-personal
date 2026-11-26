@@ -42,6 +42,8 @@ export function excludedWorkspaceAuthPath(path: string): boolean {
   if (/^remote-teammates\.json(?:$|\.\d+\.[0-9a-f-]+\.tmp$)/.test(path)) return true;
   // Saved website logins and their key never leave the computer they were saved on, nor does the key sealing webhook secrets.
   if (/^(?:logins\.json\.enc|member-secrets\.json\.enc|logins-key|webhook-key)(?:$|\.\d+\.[0-9a-f-]+\.tmp$)/.test(path)) return true;
+  // The owner's keys file (keys-file.ts): its keys stay on the computer they were written on.
+  if (path === ".env") return true;
   // A Cloud home's connected-apps installation: its connected accounts belong to it, so a copy would share them.
   if (/^connected-apps-installation\.json(?:$|\.\d+\.[0-9a-f-]+\.tmp$)/.test(path)) return true;
   // A Team Cloud's kept rules: a restored Cloud asks the Admin for the ones in force now.

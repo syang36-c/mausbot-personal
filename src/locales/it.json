@@ -6103,8 +6103,6 @@
   "connectors.tab.connected": "Connesse",
   "connectors.searchPlaceholder": "Cerca app",
   "connectors.notConfigured": "Le app connesse sono temporaneamente non disponibili. Riprova dopo aver riavviato l'host, oppure configura lì il servizio di connessione.",
-  "connectors.setupNeeded": "Le app connesse non sono ancora configurate. Per collegare Gmail, Slack e altro, aggiungi una chiave di progetto in Impostazioni → IA → Altri servizi, sotto App connesse auto-ospitate.",
-  "connectors.setupNeededRemote": "Le app connesse non sono ancora configurate sull'host. Aggiungi una chiave di progetto sotto App connesse auto-ospitate, nelle impostazioni dell'host.",
   "connectors.openSettings": "Apri impostazioni",
   "connectors.featuredBefore": "Mostro le app in evidenza.",
   "connectors.updateKey": "Aggiorna la chiave delle app connesse",

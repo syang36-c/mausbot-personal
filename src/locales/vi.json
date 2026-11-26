@@ -3714,8 +3714,6 @@
   "connectors.tab.connected": "Đã kết nối",
   "connectors.searchPlaceholder": "Tìm kiếm ứng dụng",
   "connectors.notConfigured": "Các ứng dụng đã kết nối tạm thời không khả dụng. Hãy thử lại sau khi khởi động lại host, hoặc định cấu hình dịch vụ kết nối tại đó.",
-  "connectors.setupNeeded": "Các ứng dụng đã kết nối vẫn chưa được thiết lập. Để kết nối Gmail, Slack và nhiều dịch vụ khác, hãy thêm khóa dự án trong Cài đặt → AI → Dịch vụ khác, bên dưới Tự lưu trữ ứng dụng đã kết nối.",
-  "connectors.setupNeededRemote": "Các ứng dụng đã kết nối vẫn chưa được thiết lập trên host. Hãy thêm khóa dự án trong mục Tự lưu trữ ứng dụng đã kết nối ở phần cài đặt của host.",
   "connectors.openSettings": "Mở cài đặt",
   "connectors.featuredBefore": "Đang hiển thị các ứng dụng nổi bật.",
   "connectors.updateKey": "Cập nhật khóa ứng dụng đã kết nối",

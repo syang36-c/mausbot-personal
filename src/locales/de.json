@@ -2118,8 +2118,6 @@
   "connectors.tab.connected": "Verbunden",
   "connectors.searchPlaceholder": "Apps suchen",
   "connectors.notConfigured": "Verbundene Apps sind vorübergehend nicht verfügbar. Versuch es nach einem Neustart des Hosts nochmal, oder richte dort den Verbindungsdienst ein.",
-  "connectors.setupNeeded": "Verbundene Apps sind noch nicht eingerichtet. Um Gmail, Slack und mehr zu verbinden, füge unter Einstellungen → KI → Weitere Dienste bei „Verbundene Apps selbst hosten“ einen Projektschlüssel hinzu.",
-  "connectors.setupNeededRemote": "Verbundene Apps sind auf dem Host noch nicht eingerichtet. Füge in den Einstellungen des Hosts unter „Verbundene Apps selbst hosten“ einen Projektschlüssel hinzu.",
   "connectors.openSettings": "Einstellungen öffnen",
   "connectors.featuredBefore": "Zeigt ausgewählte Apps.",
   "connectors.updateKey": "Schlüssel für verbundene Apps aktualisieren",

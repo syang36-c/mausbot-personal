@@ -4664,7 +4664,6 @@
   "connectors.tab.connected": "Połączone",
   "connectors.searchPlaceholder": "Szukaj aplikacji",
   "connectors.notConfigured": "Połączone aplikacje są tymczasowo niedostępne. Spróbuj ponownie po ponownym uruchomieniu hosta lub skonfiguruj tam usługę połączenia.",
-  "connectors.setupNeededRemote": "Połączone aplikacje nie są jeszcze skonfigurowane na hoście. Dodaj klucz projektu w sekcji Połączone aplikacje hostowane samodzielnie w ustawieniach hosta.",
   "connectors.openSettings": "Otwórz ustawienia",
   "connectors.featuredBefore": "Wyświetlane są wyróżnione aplikacje.",
   "connectors.updateKey": "Zaktualizuj klucz połączonych aplikacji",

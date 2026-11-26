@@ -5775,8 +5775,6 @@
   "connectors.tab.connected": "Conectados",
   "connectors.searchPlaceholder": "Buscar apps",
   "connectors.notConfigured": "Os apps conectados estão temporariamente indisponíveis. Tente novamente depois de reiniciar o computador anfitrião, ou configure lá o serviço de conexão.",
-  "connectors.setupNeeded": "Os apps conectados ainda não estão configurados. Para conectar Gmail, Slack e outros, adicione uma chave de projeto em Configurações → IA → Outros serviços, em “Hospedar os apps conectados por conta própria”.",
-  "connectors.setupNeededRemote": "Os apps conectados ainda não estão configurados no computador anfitrião. Adicione uma chave de projeto em “Hospedar os apps conectados por conta própria”, nas configurações do computador anfitrião.",
   "connectors.openSettings": "Abrir configurações",
   "connectors.featuredBefore": "Mostrando apps em destaque.",
   "connectors.updateKey": "Atualizar sua chave dos apps conectados",

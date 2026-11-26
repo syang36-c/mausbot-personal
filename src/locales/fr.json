@@ -1968,8 +1968,6 @@
   "connectors.tab.connected": "Connectées",
   "connectors.searchPlaceholder": "Rechercher des apps",
   "connectors.notConfigured": "Les apps connectées sont temporairement indisponibles. Réessayez après avoir redémarré l'hôte, ou configurez-y le service de connexion.",
-  "connectors.setupNeeded": "Les apps connectées ne sont pas encore configurées. Pour connecter Gmail, Slack et d'autres, ajoutez une clé de projet dans Paramètres → IA → Autres services, sous « Héberger soi-même les apps connectées ».",
-  "connectors.setupNeededRemote": "Les apps connectées ne sont pas encore configurées sur l'hôte. Ajoutez une clé de projet sous « Héberger soi-même les apps connectées » dans les paramètres de l'hôte.",
   "connectors.openSettings": "Ouvrir les réglages",
   "connectors.featuredBefore": "Affichage des apps en vedette.",
   "connectors.updateKey": "Mettez à jour votre clé des apps connectées",

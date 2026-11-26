@@ -5076,8 +5076,6 @@
   "connectors.tab.connected": "연결됨",
   "connectors.searchPlaceholder": "앱 검색",
   "connectors.notConfigured": "연결된 앱을 잠시 쓸 수 없어요. 호스트를 다시 시작한 뒤 다시 시도하거나, 호스트에서 연결 서비스를 설정하세요.",
-  "connectors.setupNeeded": "연결된 앱이 아직 설정되지 않았어요. Gmail, Slack 등을 연결하려면 설정 → AI → 기타 서비스의 연결된 앱 직접 호스팅에서 프로젝트 키를 추가하세요.",
-  "connectors.setupNeededRemote": "호스트에 연결된 앱이 아직 설정되지 않았어요. 호스트 설정의 연결된 앱 직접 호스팅에서 프로젝트 키를 추가하세요.",
   "connectors.openSettings": "설정 열기",
   "connectors.featuredBefore": "추천 앱만 표시 중이에요.",
   "connectors.updateKey": "연결된 앱 키 업데이트",

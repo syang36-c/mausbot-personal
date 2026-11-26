@@ -5286,8 +5286,6 @@
   "connectors.tab.connected": "連携済み",
   "connectors.searchPlaceholder": "アプリを検索",
   "connectors.notConfigured": "連携済みアプリは一時的に利用できません。ホストを再起動してから再試行するか、そちらで接続サービスを設定してください。",
-  "connectors.setupNeeded": "接続済みアプリはまだセットアップされていません。Gmail や Slack などを接続するには、設定 → AI → その他のサービスの「接続済みアプリをセルフホスト」にプロジェクトキーを追加してください。",
-  "connectors.setupNeededRemote": "ホストで接続済みアプリがまだセットアップされていません。ホストの設定の「接続済みアプリをセルフホスト」にプロジェクトキーを追加してください。",
   "connectors.openSettings": "設定を開く",
   "connectors.featuredBefore": "おすすめのアプリを表示しています。",
   "connectors.updateKey": "接続済みアプリのキーを更新",

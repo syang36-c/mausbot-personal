@@ -4289,8 +4289,6 @@
   "connectors.tab.connected": "Conectadas",
   "connectors.searchPlaceholder": "Buscar apps",
   "connectors.notConfigured": "Las apps conectadas no están disponibles temporalmente. Inténtalo tras reiniciar el host, o configura allí el servicio de conexión.",
-  "connectors.setupNeeded": "Las apps conectadas aún no están configuradas. Para conectar Gmail, Slack y más, añade una clave de proyecto en Ajustes → IA → Otros servicios, en «Autoalojar las apps conectadas».",
-  "connectors.setupNeededRemote": "Las apps conectadas aún no están configuradas en el host. Añade una clave de proyecto en «Autoalojar las apps conectadas», en los ajustes del host.",
   "connectors.openSettings": "Abrir ajustes",
   "connectors.featuredBefore": "Mostrando apps destacadas.",
   "connectors.updateKey": "Actualiza tu clave de apps conectadas",

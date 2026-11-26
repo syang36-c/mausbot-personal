@@ -3714,8 +3714,6 @@
   "connectors.tab.connected": "Bağlandı",
   "connectors.searchPlaceholder": "Uygulamalarda ara",
   "connectors.notConfigured": "Bağlı uygulamalar geçici olarak kullanılamıyor. Ana bilgisayarı yeniden başlattıktan sonra tekrar deneyin veya bağlantı hizmetini orada yapılandırın.",
-  "connectors.setupNeeded": "Bağlı uygulamalar henüz kurulmadı. Gmail, Slack ve daha fazlasını bağlamak için Ayarlar → AI → Diğer hizmetler bölümündeki Kendi barındırdığınız bağlı uygulamalar altında bir proje anahtarı ekleyin.",
-  "connectors.setupNeededRemote": "Bağlı uygulamalar ana bilgisayarda henüz kurulmadı. Ana bilgisayarın ayarlarında Kendi barındırdığınız bağlı uygulamalar altına bir proje anahtarı ekleyin.",
   "connectors.openSettings": "Ayarları aç",
   "connectors.featuredBefore": "Öne çıkan uygulamalar gösteriliyor.",
   "connectors.updateKey": "Bağlı uygulamalar anahtarınızı güncelleyin",

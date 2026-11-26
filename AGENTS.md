@@ -26,4 +26,25 @@ name, a type, an extracted function, one shared helper. A rule ("never X",
 "must match Y") belongs in a type, a test or a lint rule. Never suppress a lint
 rule that guards correctness; fix the code.
 
+## This fork
+
+This checkout is `syang36-c/mausbot-personal`, a personal fork that no longer
+follows upstream (there is no upstream remote). Its owner deploys and uses it
+alone: their own server and their own packaged desktop build, not upstream's
+releases, services or MausBot Cloud.
+
+- Every key comes from the owner, in `.env` in the data folder
+  (`~/.openmausbot/.env` by default). The server applies it at start
+  (`server/keys-file.ts`): only the names in `server/credential-env.ts`, over
+  the environment and `config.json`. Keys saved in Settings still work, but a
+  key in `.env` wins.
+- There is no default connected-apps broker: connected apps use the owner's
+  Composio project key, and a broker is used only where
+  `OMB_COMPOSIO_BROKER_URL` names one the owner deployed.
+- The owner's keys never reach a fixture or a test: the verification launcher
+  gives its child a temporary data folder and passes only `FAKE_CLAUDE_*`
+  through.
+- Never stop or take over another project's processes or ports without asking;
+  check what holds a port before using it.
+
 More specific `AGENTS.md` files override this note within their directories.
