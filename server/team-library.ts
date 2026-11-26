@@ -4,8 +4,8 @@ import { PACKAGE_V1_VERSION } from "../shared/package-format.ts";
 import { fetchGithubFolder } from "./share-github.ts";
 import { parseTeamManifest, type ParsedTeamManifest } from "./team-manifest.ts";
 
-export const TEAM_LIBRARY_REPOSITORY = "https://github.com/milind-soni/openmausbot-teams";
-export const TEAM_LIBRARY_RAW_ROOT = "https://raw.githubusercontent.com/milind-soni/openmausbot-teams/main";
+export const TEAM_LIBRARY_REPOSITORY = "https://github.com/syang36-c/openmausbot-teams";
+export const TEAM_LIBRARY_RAW_ROOT = "https://raw.githubusercontent.com/syang36-c/openmausbot-teams/main";
 export const TEAM_LIBRARY_CATALOG_URL = `${TEAM_LIBRARY_RAW_ROOT}/catalog.json`;
 
 // Templates published from MausBot are merged into the catalog automatically, so it grows by several a day.

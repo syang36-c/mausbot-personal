@@ -6,7 +6,7 @@ import { withCatalogPictures } from "./team-library-pictures.ts";
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3]);
 
 const catalogWith = (pictures: string[]): TeamCatalog => ({
-  format: "openmaus.catalog", version: 1, repositoryUrl: "https://github.com/milind-soni/openmausbot-teams",
+  format: "openmaus.catalog", version: 1, repositoryUrl: "https://github.com/syang36-c/openmausbot-teams",
   teams: [{
     slug: "studio", name: "Studio", summary: "Pictures.", category: "Creative", manifest: "teams/studio/team.mausteam.json",
     readme: "teams/studio/README.md", members: pictures.length, skills: [], requires: { apps: [] },
