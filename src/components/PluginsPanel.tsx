@@ -632,7 +632,7 @@ export function PluginsPanel() {
             >
               {connectedHosted.length > 0
                 ? t("hostedMcp.otherAppsSetup", { services: new Intl.ListFormat(activeLocale(), { style: "long", type: "conjunction" }).format(connectedHosted.map((app) => app.label)) })
-                : t(setupNotice.key)}{" "}
+                : t(setupNotice.key, { name: "COMPOSIO_API_KEY", file: "~/.openmausbot/.env" })}{" "}
               <button
                 className={cn(
                   "font-medium underline underline-offset-2",

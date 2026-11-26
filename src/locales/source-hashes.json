@@ -39610,8 +39610,8 @@
       "server.github.card.fetch": "dec517e83d4eb81a911f73675cc43c1b4b9be16e07748398b096d83473cc1a57",
       "server.github.card.description": "03af79bfc8dd9f02aa1b65c41a556748059391ea1c098a7501a79b7b8cdadead",
       "server.github.card.connectInApps": "2360dc1e61bdfbe9a204c0e21d1f42b98a284cca9e8198e9047b333a511d1c3a",
-      "connectors.setupNeeded": "666b19c781f4e3501721f568e0e5d77aaae4fb829661ef63342d0c06ee57ed3f",
-      "connectors.setupNeededRemote": "577d1fdc79bcd0774824d880fc79293f50496a3d2a9e4ff8a4fc8a3747895b30"
+      "connectors.setupNeeded": "589e82d13c9163def27cf19f3e02a8e91a7cbc9704162f9dbb3b7a49baad2cde",
+      "connectors.setupNeededRemote": "05af7726323eb7a3091c2440be369c9e43ec3c5e601664dc8ab36fabc04bc0b3"
     },
     "zh": {
       "pro.fromPrice": "a48a04a457d60b08b54fc83e7a6c4584ffedb1e23621859084900c8521a3af7b",
@@ -41684,8 +41684,8 @@
       "connectors.tab.connected": "22965568d22a14ee17af055d2870b50afcfe9fd94a83eec3196e266932297bb2",
       "connectors.searchPlaceholder": "a10a36fa109818bee2cb638ae0fe9d5a39559fb6ed84053eaa999595ab9d7c75",
       "connectors.notConfigured": "765b83084f047d405bd311b4069fe700a9997b0d71b2412a8fbc2f5c89883c3b",
-      "connectors.setupNeeded": "666b19c781f4e3501721f568e0e5d77aaae4fb829661ef63342d0c06ee57ed3f",
-      "connectors.setupNeededRemote": "577d1fdc79bcd0774824d880fc79293f50496a3d2a9e4ff8a4fc8a3747895b30",
+      "connectors.setupNeeded": "589e82d13c9163def27cf19f3e02a8e91a7cbc9704162f9dbb3b7a49baad2cde",
+      "connectors.setupNeededRemote": "05af7726323eb7a3091c2440be369c9e43ec3c5e601664dc8ab36fabc04bc0b3",
       "connectors.openSettings": "ca381c1e76e681b6c18fa984a2e2fda6ed4a9f28e914f539db34a6dcb3737149",
       "connectors.featuredBefore": "b4168ab2c4624572cdbeaa8df5bfa1913737f9b55d8f84f0bea388beccb58af9",
       "connectors.updateKey": "a97d0403e4c11731af29c8e5bf5111ff0997ab9fe3b4e00767ff90e345847804",
@@ -52763,8 +52763,8 @@
       "connectors.tab.connected": "22965568d22a14ee17af055d2870b50afcfe9fd94a83eec3196e266932297bb2",
       "connectors.searchPlaceholder": "a10a36fa109818bee2cb638ae0fe9d5a39559fb6ed84053eaa999595ab9d7c75",
       "connectors.notConfigured": "765b83084f047d405bd311b4069fe700a9997b0d71b2412a8fbc2f5c89883c3b",
-      "connectors.setupNeeded": "666b19c781f4e3501721f568e0e5d77aaae4fb829661ef63342d0c06ee57ed3f",
-      "connectors.setupNeededRemote": "577d1fdc79bcd0774824d880fc79293f50496a3d2a9e4ff8a4fc8a3747895b30",
+      "connectors.setupNeeded": "589e82d13c9163def27cf19f3e02a8e91a7cbc9704162f9dbb3b7a49baad2cde",
+      "connectors.setupNeededRemote": "05af7726323eb7a3091c2440be369c9e43ec3c5e601664dc8ab36fabc04bc0b3",
       "connectors.openSettings": "ca381c1e76e681b6c18fa984a2e2fda6ed4a9f28e914f539db34a6dcb3737149",
       "connectors.featuredBefore": "b4168ab2c4624572cdbeaa8df5bfa1913737f9b55d8f84f0bea388beccb58af9",
       "connectors.updateKey": "a97d0403e4c11731af29c8e5bf5111ff0997ab9fe3b4e00767ff90e345847804",
