@@ -230,9 +230,11 @@ function placeholder(node: Json, root: Json): Json {
   if (unique.length !== 1) return { type: unique.length ? unique : JSON_TYPES };
   const type = unique[0]!;
   if (type === "object") return { type, additionalProperties: true };
+  // Gemini refuses the whole request when an array has no `items`.
+  if (type === "array") return { type, items: isObject(node.items) ? placeholder(node.items, root) : {} };
   const choices = Array.isArray(node.enum) ? node.enum : "const" in node ? [node.const] : undefined;
   const sameType = (value: unknown) => valueType(value) === type || (type === "number" && valueType(value) === "integer");
-  const keep = type !== "array" && choices && choices.length <= 64 && choices.every(sameType) && schemaBytes(choices) <= 1_024;
+  const keep = choices && choices.length <= 64 && choices.every(sameType) && schemaBytes(choices) <= 1_024;
   return keep ? { type, enum: choices } : { type };
 }
 
@@ -319,7 +321,8 @@ export function fitToolListForBudget<Tool extends { name: string; inputSchema?: 
     Buffer.byteLength(JSON.stringify({ ...item, inputSchema: schemas.get(item as Tool) ?? item.inputSchema }) ?? "");
   // Each tool's size is measured again only when its own schema changes, so a long list is not re-measured per step.
   const sizes = new Map(list.map((tool) => [tool, bytesOf(tool)]));
-  let total = [...sizes.values()].reduce((sum, bytes) => sum + bytes, 0);
+  // The list goes out as one JSON array: its brackets and commas count too.
+  let total = [...sizes.values()].reduce((sum, bytes) => sum + bytes, Math.max(1, list.length) + 1);
   const from = total;
   if (from <= profile.maxListBytes) return list;
   const budget: number = profile.maxListBytes;

@@ -180,6 +180,20 @@ describe("fitting a tool list to Gemini's list budget", () => {
     expect(fitToolListForBudget(tools, { ...GEMINI, maxListBytes: undefined })).toEqual(tools);
   });
 
+  it("keeps a typed items on every array it cuts down, which Gemini refuses a request without", () => {
+    const inputSchema = { type: "object", properties: {
+      ids: { type: "array", items: { type: "string", maxLength: 40 } },
+      steps: { type: "array", items: { type: "object", properties: { at: { type: "string" } } } },
+      grid: { type: "array", items: { type: "array", items: { type: "integer" } } },
+    } } as Json;
+    const [fitted] = fitToolListForBudget([{ name: "tool", inputSchema }], { ...GEMINI, maxListBytes: 1 }) as Array<{ inputSchema: Json }>;
+    expect(fitted!.inputSchema.properties).toEqual({
+      ids: { type: "array", items: { type: "string" } },
+      steps: { type: "array", items: { type: "object", additionalProperties: true } },
+      grid: { type: "array", items: { type: "array", items: { type: "integer" } } },
+    });
+  });
+
   it("the full agents list fits with every tool's name kept", () => {
     const tools = fullAgents.tools as Array<{ name: string; description: string; inputSchema: Json }>;
     expect(bytes(tools)).toBeGreaterThan(GEMINI.maxListBytes!);
