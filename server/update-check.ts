@@ -2,9 +2,9 @@
 import { existsSync } from "node:fs";
 import { join, sep } from "node:path";
 
-export const LATEST_RELEASE_URL = "https://api.github.com/repos/milind-soni/OpenMausBot/releases/latest";
+export const LATEST_RELEASE_URL = "https://api.github.com/repos/syang36-c/mausbot-personal/releases/latest";
 /** Written by .github/workflows/promote-stable.yml: the released version our own Clouds have run for 48 hours. */
-export const STABLE_CHANNEL_URL = "https://raw.githubusercontent.com/milind-soni/OpenMausBot/channels/stable.json";
+export const STABLE_CHANNEL_URL = "https://raw.githubusercontent.com/syang36-c/mausbot-personal/channels/stable.json";
 const CACHE_MS = 60 * 60_000;
 /** A press of Check for updates looks again unless the last lookup is younger than this. Any session may press it, and
  * GitHub allows a server 60 lookups an hour without a token: presses keep to 12 of them. */

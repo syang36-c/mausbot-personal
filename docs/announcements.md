@@ -248,7 +248,7 @@ the list newest first and moves `updatedAt` forward. Read the diff, then merge i
 
 With usage analytics on, and only then (the same switch as every other event), each card sends one `announcement` event
 per step: `{ id, kind, action }`, `action` being `shown`, `primary`, `secondary` or `close` (the X, Escape or Not now).
-The `id` is the card's own id from this public file, the same for everyone. See [Usage analytics](analytics.md).
+The `id` is the card's own id from this public file, the same for everyone.
 
 ## Tests and previews
 

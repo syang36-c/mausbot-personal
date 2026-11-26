@@ -2332,7 +2332,7 @@ launch: What's new comes first, and the Boat card waits for a later one.
    button, Not now, its X, Escape (while focus is inside) and a click outside
    end it for good; until then it comes back on a later launch. It takes focus
    at the slide's title, keeps Tab inside, and gives focus back when it closes
-   unless focus has moved on. `whats_new` ([docs/analytics.md](analytics.md))
+   unless focus has moved on. `whats_new`
    counts each slide seen and each step.
 2. **The card after the update** (`CloudTrialIntro`, id `cloud-trial-intro-v1`):
    MausBot Cloud's free trial for someone signed out or with no plan who
@@ -2595,7 +2595,6 @@ shown, and the dialog offers today's plans at the Admin's prices, charged
 today. Analytics (the app's existing, optional PostHog) register `app_version`
 and `surface` (`local` or `server`) on every event, and count the card, its
 actions, the tip, the dialog's views and checkouts opened, with no content.
-[docs/analytics.md](analytics.md) lists every event and property.
 
 ## This computer's bots move to your Cloud
 

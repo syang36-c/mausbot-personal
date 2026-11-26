@@ -8,7 +8,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { z } from "zod";
 
-import { COMPANION_INSTALLATION_CREDENTIAL_FIELD } from "../electron/companion-account-service.mjs";
+import { COMPANION_INSTALLATION_CREDENTIAL_FIELD, resolveCompanionControlPlaneURL } from "../electron/companion-account-service.mjs";
 import { normalizeControlPlaneURL } from "../electron/control-plane-client.mjs";
 import {
   APNS_TOKEN,
@@ -515,10 +515,10 @@ export function phonePushAccess(controlPlane: unknown, credential: unknown): Ins
 export class PhonePushAccessSource {
   private desktop: InstallationPushAccess | null | undefined;
   private readonly env: NodeJS.ProcessEnv;
-  private readonly options: { tunnelFile: string; defaultControlPlane: string };
+  private readonly options: { tunnelFile: string };
   private readonly cloudHome: CloudHomePushAccess | null;
 
-  constructor(options: { env?: NodeJS.ProcessEnv; tunnelFile: string; defaultControlPlane: string; cloudHome?: { adminOrigin: string; machineId: string; bootstrapSecret: string } | null }) {
+  constructor(options: { env?: NodeJS.ProcessEnv; tunnelFile: string; cloudHome?: { adminOrigin: string; machineId: string; bootstrapSecret: string } | null }) {
     this.env = options.env ?? process.env;
     this.options = options;
     this.cloudHome = cloudHomePushAccess(options.cloudHome);
@@ -535,8 +535,7 @@ export class PhonePushAccessSource {
   }
 
   private controlPlane(): string {
-    if (Object.hasOwn(this.env, "OMB_CONTROL_PLANE_URL")) return normalizeControlPlaneURL(this.env.OMB_CONTROL_PLANE_URL ?? "");
-    return this.options.defaultControlPlane;
+    return resolveCompanionControlPlaneURL({ environment: this.env });
   }
 
   current(): PhonePushAccess | null {

@@ -38,9 +38,12 @@ releases, services or MausBot Cloud.
   (`server/keys-file.ts`): only the names in `server/credential-env.ts`, over
   the environment and `config.json`. Keys saved in Settings still work, but a
   key in `.env` wins.
-- There is no default connected-apps broker: connected apps use the owner's
-  Composio project key, and a broker is used only where
-  `OMB_COMPOSIO_BROKER_URL` names one the owner deployed.
+- No upstream service is reached by default. There is no default
+  connected-apps broker (`OMB_COMPOSIO_BROKER_URL`) or companion control plane
+  (`OMB_CONTROL_PLANE_URL`): connected apps use the owner's Composio project
+  key, and phones reach the server over Tailscale, the LAN or the owner's own
+  proxy. Usage analytics are gone: `track()` records nothing. Updates and the
+  update check read this fork's releases.
 - The owner's keys never reach a fixture or a test: the verification launcher
   gives its child a temporary data folder and passes only `FAKE_CLAUDE_*`
   through.

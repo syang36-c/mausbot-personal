@@ -30,7 +30,7 @@ vi.mock("@/state/store", async (original) => {
   };
 });
 vi.mock("@/lib/interface-mode", () => ({ useAdvancedMode: () => false, setAdvancedMode: fx.setAdvancedMode }));
-vi.mock("@/lib/analytics", () => ({ analyticsEnabled: () => false, setAnalyticsEnabled: vi.fn(), track: vi.fn() }));
+vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/lib/use-owner-or-admin", () => ({ useOwnerOrAdmin: () => true }));
 vi.mock("../DesktopCapabilities", () => ({ useDesktopCapabilities: () => ({ capabilities: {} }) }));
 vi.mock("../EnginesSettings", () => ({ EnginesSettings: marker("engines") }));
@@ -102,12 +102,11 @@ describe("an Advanced setting found from Simple", () => {
 
   it("opens a row on a page only Advanced lists with just its section, marked, and clearing the search goes back to Overview", async () => {
     flushSync(() => root.render(createElement(SettingsModal)));
-    search("analytics");
-    flushSync(() => hit("analytics").click());
+    search("shift+enter");
+    flushSync(() => hit("send-key").click());
     expect(fx.section).toBe("general");
-    await vi.waitFor(() => expect(document.querySelector('[data-settings-peek="privacy"]')?.textContent).toContain("Advanced setting"));
-    expect(body().querySelector('[data-settings-block="privacy"]')).not.toBeNull();
-    expect(body().querySelector('[data-settings-block="typing"]')).toBeNull();
+    await vi.waitFor(() => expect(document.querySelector('[data-settings-peek="typing"]')?.textContent).toContain("Advanced setting"));
+    expect(body().querySelector('[data-settings-block="typing"]')).not.toBeNull();
     expect(body().querySelector('[data-settings-block="notifications"]')).toBeNull();
     expect(header().textContent).not.toContain("Advanced setting");
     expect(document.querySelector('[data-settings-page="general"]')).toBeNull();
@@ -124,7 +123,7 @@ describe("an Advanced setting found from Simple", () => {
     flushSync(() => hit("page:general").click());
     await vi.waitFor(() => expect(body().getAttribute("data-settings-page-body")).toBe("general"));
     expect(header().textContent).toContain("Advanced setting");
-    for (const block of ["typing", "notifications", "privacy"]) expect(body().querySelector(`[data-settings-block="${block}"]`)).not.toBeNull();
+    for (const block of ["typing", "notifications"]) expect(body().querySelector(`[data-settings-block="${block}"]`)).not.toBeNull();
     expect(document.querySelector("[data-settings-peek]")).toBeNull();
     expect(fx.setAdvancedMode).not.toHaveBeenCalled();
   });

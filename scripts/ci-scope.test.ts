@@ -349,12 +349,12 @@ describe("CI outputs", () => {
   });
 
   it("runs the docs tests in one job for docs, and skips the build", () => {
-    const out = ciOutputs(selectCiScope(["docs/analytics.md"]), PR);
+    const out = ciOutputs(selectCiScope(["docs/composio.md"]), PR);
     expect(out).toMatchObject({ jobs: ["vitest"] });
     expect(out.vitest_matrix.include).toEqual([{
       os: "ubuntu-latest", part: "docs tests", shard: 1, shards: 1, files: VITEST_SUBSETS["docs-tests"].files.join(" "), e2e: "all", node_tests: false, workers: 4,
     }]);
-    expect(ciOutputs(selectCiScope(["docs/analytics.md", "src/locales/de.json"]), PR).vitest_matrix.include.map((entry: { part: string }) => entry.part))
+    expect(ciOutputs(selectCiScope(["docs/composio.md", "src/locales/de.json"]), PR).vitest_matrix.include.map((entry: { part: string }) => entry.part))
       .toEqual(["locale tests 1/2", "locale tests 2/2", "docs tests"]);
   });
 

@@ -23,7 +23,7 @@ import {
   readSafeLogTail,
 } from "./diagnostics.mjs";
 import { migrateWorkspaceConfigFile, workspaceCredentialEnv } from "./workspace-credentials.mjs";
-import { evictStartupCacheOnce } from "./startup-cache-eviction.mjs"; import { desktopLaunchAnalytics } from "./launch-analytics.mjs";
+import { evictStartupCacheOnce } from "./startup-cache-eviction.mjs";
 import { activateExistingWindow, releaseSingleInstanceLock } from "./single-instance.mjs";
 import { bootFailureMessage, listeningSignal, pollServerIdentity, SERVER_BOOT_TIMEOUT_MS, SERVER_LISTENING_GRACE_MS } from "./server-boot-probe.mjs";
 import { createServerSupervisor } from "./server-supervisor.mjs";
@@ -287,7 +287,7 @@ let companyBackupClientStateRequest = null;
 let companyRestoreCommitting = false;
 let companyBackupConfigurationRevision = 0;
 const managedDesktopRelay = createManagedDesktopRelay();
-const includedX = createDesktopIncludedX({ account: () => cloudAccount, server: () => serverProc, log: slog }), includedPages = createDesktopIncludedPages({ account: () => cloudAccount, server: () => serverProc, log: slog }), linkCommandsFact = createLinkCommandsFact({ server: () => (serverReady ? serverProc : null), log: slog }), phoneLinkFact = createPhoneLinkFact({ retired: () => companionTunnelRetired(secureCredentialState?.read() ?? secureCredentials), server: () => (serverReady ? serverProc : null), log: slog }), phonePushAccess = createPhonePushAccessSync({ server: () => (serverReady ? serverProc : null), credentials: () => secureCredentialState?.read() ?? secureCredentials, controlPlane: () => resolveCompanionControlPlaneURL({ isPackaged: app.isPackaged, environment: process.env }), log: slog });
+const includedX = createDesktopIncludedX({ account: () => cloudAccount, server: () => serverProc, log: slog }), includedPages = createDesktopIncludedPages({ account: () => cloudAccount, server: () => serverProc, log: slog }), linkCommandsFact = createLinkCommandsFact({ server: () => (serverReady ? serverProc : null), log: slog }), phoneLinkFact = createPhoneLinkFact({ retired: () => companionTunnelRetired(secureCredentialState?.read() ?? secureCredentials), server: () => (serverReady ? serverProc : null), log: slog }), phonePushAccess = createPhonePushAccessSync({ server: () => (serverReady ? serverProc : null), credentials: () => secureCredentialState?.read() ?? secureCredentials, controlPlane: () => resolveCompanionControlPlaneURL({ environment: process.env }), log: slog });
 const cloudPower = createCloudPowerGate({ power: () => cloudAccount?.power() ?? null, wanted: () => Boolean(cloudSync?.running() || computerSharing?.lendingToCloud()) }); const focusWakeFile = () => jsonFile(path.join(app.getPath("userData"), CLOUD_FOCUS_WAKE_FILE)), cloudFocusWake = createCloudFocusWake({ account: () => cloudAccount, pref: { read: () => focusWakeFile().read(), write: (value) => focusWakeFile().write(value) }, log: slog });
 const utilityServerExits = new WeakMap(), systemProxy = createSystemProxyCache(), bootHeadStart = createBootHeadStart({ credentials: () => launchRecord.span("keychain", () => loadSecureCredentials()), proxy: () => systemProxy.refresh() }); launchRecord.mark("mainImported"); // A Mac app opened from Finder never gets the shell's proxy.
 const UTILITY_SERVER_STOP_TIMEOUT_MS = 9_500; // the server's shutdown deadline (8 s, server/graceful-shutdown.ts) and its 1 s log flush
@@ -504,10 +504,10 @@ function slog(line) {
 
 // Synchronous: a fatal exception can end Electron before an async write flushes.
 // uncaughtExceptionMonitor observes Node's fatal path without handling it, so the process still exits.
-const launchAnalytics = desktopLaunchAnalytics({ app, session, prefs: nativeText.prefs }); installDesktopCrashListeners({
+installDesktopCrashListeners({
   appTarget: app,
   processTarget: process,
-  record: (event) => { appendDesktopCrashRecord(DESKTOP_CRASH_LOG, DESKTOP_CRASH_LOG_MAX_BYTES, formatDesktopCrashRecord(event)); launchAnalytics.crashed(event); },
+  record: (event) => { appendDesktopCrashRecord(DESKTOP_CRASH_LOG, DESKTOP_CRASH_LOG_MAX_BYTES, formatDesktopCrashRecord(event)); },
   isShuttingDown: () => desktopShutdownStarted,
   mainWebContents: () => mainWindow?.webContents ?? null,
 });
@@ -714,10 +714,7 @@ function installationDisplayName() {
 
 function ensureCompanionAccountService() {
   if (companionAccountService) return companionAccountService;
-  const baseURL = resolveCompanionControlPlaneURL({
-    isPackaged: app.isPackaged,
-    environment: process.env,
-  });
+  const baseURL = resolveCompanionControlPlaneURL({ environment: process.env });
   let client = null;
   if (baseURL) {
     try {
@@ -1157,7 +1154,7 @@ async function startServerOn(port, dataDir = runningDataDir ?? startupEnvironmen
     }
   });
   proc.once("spawn", () => {
-    slog(`spawned pid=${proc.pid}`); launchAnalytics.stage("server_spawned"); launchRecord.mark("serverSpawned");
+    slog(`spawned pid=${proc.pid}`); launchRecord.mark("serverSpawned");
     if (!serverSupervisor.isCurrent(proc)) return;
     syncDesktopMutationToken(proc); void tailnetShare.attach(proc, port, companionSettings().routes.tailscale);
     syncPhoneSecretKey(proc); grantLocalComputer(proc, (child) => serverSupervisor.isCurrent(child)); browserPanes.attach(proc);
@@ -1185,7 +1182,7 @@ async function startServerOn(port, dataDir = runningDataDir ?? startupEnvironmen
   if (!stopped) {
     slog(`child on port ${port} did not exit after termination; refusing to start a sibling server`);
   }
-  launchAnalytics.serverFailed(stopped ? identity.outcome : "stuck-child"); return { proc: null, reason: stopped ? identity.outcome : "stuck-child", abort: !stopped };
+  return { proc: null, reason: stopped ? identity.outcome : "stuck-child", abort: !stopped };
 }
 
 async function startServerPackaged() {
@@ -1197,7 +1194,7 @@ async function startServerPackaged() {
       const started = await startServerOn(port);
       if (started.proc) {
         SERVER_PORT = port;
-        if (serverSupervisor.ready(started.proc)) { launchAnalytics.stage("server_ready"); return true; }
+        if (serverSupervisor.ready(started.proc)) return true;
       }
       if (started.abort) return false;
       if (started.reason !== "foreign-owner") everyPortForeignOwned = false;
@@ -2020,7 +2017,7 @@ function createWindow({ deferNavigation = false } = {}) {
     }
   });
   win.webContents.on("did-fail-load", (_event, errorCode, errorDescription, validatedURL, isMainFrame) => {
-    if (!isMainFrame || errorCode === -3 /* aborted by a newer navigation */) return; if (validatedURL.startsWith(`${rendererOrigin()}/`)) launchAnalytics.stage("page_load_failed");
+    if (!isMainFrame || errorCode === -3 /* aborted by a newer navigation */) return;
     const remote = activeRemote(environmentsState);
     if (!remote) return;
     let origin = null;
@@ -2802,14 +2799,14 @@ app.whenReady().then(async () => { launchRecord.mark("ready");
       slog(`system tray unavailable: ${error?.message ?? error}`);
     }
   }
-  hiddenStart = loginItem.startedHidden() || reopenedOutOfSight(); launchAnalytics.stage("started", { hidden: hiddenStart }); launchRecord.setHidden(hiddenStart);
+  hiddenStart = loginItem.startedHidden() || reopenedOutOfSight(); launchRecord.setHidden(hiddenStart);
   startupScreen = hiddenStart ? null : createStartupScreen({
     BrowserWindow, iconPath: APP_ICON, isQuitting: () => desktopShutdownStarted, t: nativeT, lang: nativeText.intlTag(),
     onQuit: () => app.quit(),
     onHide: desktopTray ? (win) => desktopTray.hide(win) : undefined,
     isHidden: () => desktopTray?.isHidden() ?? false,
     onShow: (win) => desktopTray?.windowShown(win),
-    onFinished: () => { startupScreen = null; }, onReveal: via => launchAnalytics.stage("window_shown", { reason: via }),
+    onFinished: () => { startupScreen = null; },
   });
   bootHeadStart.start(); await startupScreen?.ready;
   if (desktopShutdownStarted) return;
@@ -2871,7 +2868,7 @@ app.whenReady().then(async () => { launchRecord.mark("ready");
   });
   secureCredentials = secureCredentialState.read();
   if (app.isPackaged) await ensurePhoneSecretIdentity();
-  companionE2E = createDesktopCompanionE2E({ isPackaged: app.isPackaged, appVersion: app.getVersion(), readCredentials: () => secureCredentialState?.read() ?? secureCredentials, updateCredentials: updateSecureCredentialDocument, powerMonitor, log: slog, onState: phoneLinkFact.observe });
+  companionE2E = createDesktopCompanionE2E({ appVersion: app.getVersion(), readCredentials: () => secureCredentialState?.read() ?? secureCredentials, updateCredentials: updateSecureCredentialDocument, powerMonitor, log: slog, onState: phoneLinkFact.observe });
   void companionE2E.start();
   desktopRemoteAccess = desktopCompanionAccess(secureCredentials);
   const hostedAccount = desktopRemoteAccess ? null : ensureCompanionAccountService();
@@ -2953,13 +2950,13 @@ app.whenReady().then(async () => { launchRecord.mark("ready");
           : path.join(app.getAppPath(), "dist"),
       });
       SERVER_PORT = desktopCompanionRelay.port;
-      serverReady = true; launchAnalytics.stage("server_ready", { reason: "relay" });
+      serverReady = true;
     } catch (error) {
       serverReady = false;
       slog(`desktop companion relay failed: ${error?.message ?? error}`);
     }
   } else if (app.isPackaged) {
-    const booted = await startServerPackaged(); if (!booted && !desktopShutdownStarted) launchAnalytics.stage("server_failed");
+    const booted = await startServerPackaged();
     if (!booted && !desktopShutdownStarted && bootDataDir !== desktopDataDir()) {
       slog(`boot environment ${bootDataDir} did not start; falling back to the default data dir`);
       persistEnvironments({ ...environmentsState, activeId: LOCAL_ID });

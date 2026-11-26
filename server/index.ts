@@ -101,7 +101,7 @@ import { removeRetiredAppFiles } from "./retired-apps.ts"; import { createEmailR
 import { createPhones } from "./host/phones.ts";
 import { NOT_THE_OWNER } from "./phones/owner.ts";
 import { PHONE_INTERNAL_MCP_PATH } from "./phones/rpc.ts";
-import { isLongPollPath, phoneKey } from "./routes/phones.ts"; import { createPhoneActivityRoutes, createPhonePushRoutes } from "./routes/phone-push.ts"; import { PhoneActivity } from "./phone-activity.ts"; import { PhonePush, PhonePushAccessSource, phonePushEnabled } from "./phone-push.ts"; import { DEFAULT_COMPANION_CONTROL_PLANE_URL } from "../electron/companion-account-service.mjs"; import { TUNNEL_CREDENTIALS_FILE } from "./tunnel.ts";
+import { isLongPollPath, phoneKey } from "./routes/phones.ts"; import { createPhoneActivityRoutes, createPhonePushRoutes } from "./routes/phone-push.ts"; import { PhoneActivity } from "./phone-activity.ts"; import { PhonePush, PhonePushAccessSource, phonePushEnabled } from "./phone-push.ts"; import { TUNNEL_CREDENTIALS_FILE } from "./tunnel.ts";
 import { createDataRoutes } from "./data/routes.ts";
 import { DataSheetRegistry } from "./data/sheet.ts";
 import { DataFailure } from "./data/types.ts";
@@ -1465,7 +1465,7 @@ const browserCleanup: BrowserCleanupCoordinator = new BrowserCleanupCoordinator(
     return true;
   },
 });
-const phoneSecrets = new PhoneSecretBridge(postDesktopPrivateMessage, undefined, undefined, DESKTOP_MANAGED); const phonePushAccess = new PhonePushAccessSource({ tunnelFile: join(DATA_DIR, TUNNEL_CREDENTIALS_FILE), defaultControlPlane: DEFAULT_COMPANION_CONTROL_PLANE_URL, cloudHome: CLOUD_HOME });
+const phoneSecrets = new PhoneSecretBridge(postDesktopPrivateMessage, undefined, undefined, DESKTOP_MANAGED); const phonePushAccess = new PhonePushAccessSource({ tunnelFile: join(DATA_DIR, TUNNEL_CREDENTIALS_FILE), cloudHome: CLOUD_HOME });
 utilityParentPort?.on("message", (event) => {
   const message = event?.data;
   try {

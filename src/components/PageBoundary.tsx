@@ -1,6 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
-import { initAnalytics, track } from "@/lib/analytics";
+import { track } from "@/lib/analytics";
 import { crashArea } from "@/lib/crash-area";
 import { t } from "@/lib/i18n";
 
@@ -14,7 +14,6 @@ export class PageBoundary extends Component<{ children: ReactNode }, { error: Er
   }
 
   componentDidCatch(_error: unknown, info: ErrorInfo) {
-    void initAnalytics();
     // The area the failing component came from, from a fixed list (crash-area.ts); never the error's text.
     track("app_load", { stage: "error", component: crashArea(info.componentStack) });
   }
