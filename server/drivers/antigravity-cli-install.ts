@@ -14,6 +14,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
 import { access, chmod, copyFile, lstat, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, statfs, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 
 import { writeFileAtomic } from "../atomic.ts";
@@ -32,7 +33,15 @@ export const ANTIGRAVITY_NATIVE_CLI_ENV = "OMB_ANTIGRAVITY_NATIVE_CLI";
  * keeps the pinned runtime where it is installed, and only a new install takes the CLI. */
 export const ANTIGRAVITY_CLI_FIRST = process.env[ANTIGRAVITY_NATIVE_CLI_ENV] === "1";
 
-/** Where the CLI keeps a Google sign-in, under `<profile>/antigravity-acp/`, when it does not use the OS keyring (which
+/** The CLI's own home. The default account runs in it and shares its sign-in with the CLI in a terminal, as the default
+ * Claude and Codex accounts share `~/.claude` and `~/.codex`; an added account has a profile of its own. */
+export const antigravityCliHome = () => join(homedir(), ".gemini");
+
+/** The folder under a profile where the CLI keeps its sign-in and conversations: in its own home, the name it uses there. */
+export const antigravityAppDataDir = (profileDirectory: string) =>
+  resolve(profileDirectory) === antigravityCliHome() ? "antigravity-cli" : "antigravity-acp";
+
+/** Where the CLI keeps a Google sign-in, under `<profile>/<app data dir>/`, when it does not use the OS keyring (which
  * it skips while SSH_CONNECTION is set up to 1.5.15, and while AGY_CLI_FORCE_FILE_TOKEN_STORAGE is set from 1.5.16):
  * `{"token":{"access_token","expiry",…},"auth_method":"consumer"}` in 1.5.16. It never writes the pinned runtime's
  * `acp_token.json`, and stores no OAuth client, so this app cannot refresh it. */

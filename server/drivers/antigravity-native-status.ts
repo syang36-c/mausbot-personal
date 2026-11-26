@@ -14,7 +14,7 @@ import {
   type AntigravityProfile,
 } from "./antigravity-acp.ts";
 import type { AntigravityRuntime } from "./antigravity-runtime.ts";
-import { ANTIGRAVITY_CLI_TOKEN_FILE } from "./antigravity-cli-install.ts";
+import { ANTIGRAVITY_CLI_TOKEN_FILE, antigravityAppDataDir } from "./antigravity-cli-install.ts";
 import { acpVendorMessage } from "./acp/rpc-error.ts";
 
 export type NativeSignIn = "in" | "out";
@@ -46,7 +46,7 @@ const advertised = (value: unknown) => value === true || (typeof value === "obje
 
 /** The CLI's own file store for the sign-in: the only one it uses as this app starts it. */
 export const antigravityNativeTokenPath = (profile: Pick<AntigravityProfile, "directory">) =>
-  join(profile.directory, "antigravity-acp", ANTIGRAVITY_CLI_TOKEN_FILE);
+  join(profile.directory, antigravityAppDataDir(profile.directory), ANTIGRAVITY_CLI_TOKEN_FILE);
 
 /** Runs `work` on a new CLI process and ends it; with `waitForExit` the process is gone before this resolves, or it throws. */
 async function withCli<T>(

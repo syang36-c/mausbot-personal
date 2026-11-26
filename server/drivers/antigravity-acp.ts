@@ -38,7 +38,7 @@ import type { BoxRelay } from "../bot-box/relay.ts";
 import type { ModelCatalog } from "../contracts.ts";
 import type { ChildProcess } from "node:child_process";
 import type { AntigravityRuntime } from "./antigravity-runtime.ts";
-import { ANTIGRAVITY_CLI_TOKEN_FILE } from "./antigravity-cli-install.ts";
+import { ANTIGRAVITY_CLI_TOKEN_FILE, antigravityAppDataDir, antigravityCliHome } from "./antigravity-cli-install.ts";
 import { acpVariantOption, surveyModelVariants } from "./acp/config-options.ts";
 import { StderrTail, exitDetail } from "./acp/exit-report.ts";
 import {
@@ -192,13 +192,18 @@ export function authorizationUrlFromLine(line: string): string | null {
 
 export const ANTIGRAVITY_SSH_CONNECTION = BOX_SSH_CONNECTION;
 
+export const ANTIGRAVITY_DEFAULT_INSTANCE = "antigravity";
+
 export function antigravityProfileDirectory(instanceId: string, baseDir = DATA_DIR): string {
+  if (instanceId === ANTIGRAVITY_DEFAULT_INSTANCE) return antigravityCliHome();
   return join(baseDir, "providers", "antigravity", createHash("sha256").update(instanceId).digest("hex"));
 }
 
 /** A removed account's Google sign-in goes with its profile, so no refresh token outlives the account. Best effort:
  * the account is already gone from the config, and Windows refuses while a retiring process still holds a file. */
 export async function removeAntigravityProfile(instanceId: string, baseDir = DATA_DIR): Promise<void> {
+  // Data loss: the default account's profile is the CLI's own home.
+  if (instanceId === ANTIGRAVITY_DEFAULT_INSTANCE) return;
   await rm(antigravityProfileDirectory(instanceId, baseDir), { recursive: true, force: true, maxRetries: 4, retryDelay: 250 })
     .catch((error) => {
       console.warn(`antigravity: could not remove a removed account's profile: ${error instanceof Error ? error.message : String(error)}`);
@@ -212,7 +217,8 @@ export function antigravityTokenPath(instanceId: string, baseDir = DATA_DIR): st
 
 /** The native CLI's sign-in. */
 export function antigravityCliTokenPath(instanceId: string, baseDir = DATA_DIR): string {
-  return join(antigravityProfileDirectory(instanceId, baseDir), "antigravity-acp", ANTIGRAVITY_CLI_TOKEN_FILE);
+  const profile = antigravityProfileDirectory(instanceId, baseDir);
+  return join(profile, antigravityAppDataDir(profile), ANTIGRAVITY_CLI_TOKEN_FILE);
 }
 
 /** Both runtimes' sign-in files. An account that switched to the CLI keeps the Classic runtime's file. */
@@ -259,21 +265,21 @@ export async function prepareAntigravityProfile(input: {
   platform?: NodeJS.Platform;
 }): Promise<AntigravityProfile> {
   const directory = resolve(input.profileDirectory ?? antigravityProfileDirectory(input.instanceId, input.baseDir));
+  // The CLI's own home keeps the permissions and settings the person gave it.
+  const shared = input.runtime.harnessPath === null && directory === antigravityCliHome();
   const acpDirectory = join(directory, "antigravity-acp");
-  await mkdir(acpDirectory, { recursive: true, mode: 0o700 });
+  if (!shared) {
+    await mkdir(acpDirectory, { recursive: true, mode: 0o700 });
+    if (process.platform !== "win32") {
+      const { chmod } = await import("node:fs/promises");
+      await chmod(directory, 0o700);
+      await chmod(acpDirectory, 0o700);
+    }
+    writeFileAtomic(join(acpDirectory, "settings.json"), `${JSON.stringify({ auth: { type: "oauth-personal" } })}\n`, { mode: 0o600 });
+  }
   const skillsDirectory = join(directory, "omb-skills");
   await mkdir(skillsDirectory, { recursive: true, mode: 0o700 });
   if (!(await lstat(skillsDirectory)).isDirectory()) throw new Error("Antigravity staging path must be a real directory.");
-  if (process.platform !== "win32") {
-    const { chmod } = await import("node:fs/promises");
-    await chmod(directory, 0o700);
-    await chmod(acpDirectory, 0o700);
-  }
-  writeFileAtomic(
-    join(acpDirectory, "settings.json"),
-    `${JSON.stringify({ auth: { type: "oauth-personal" } })}\n`,
-    { mode: 0o600 },
-  );
 
   const executable = process.platform === "win32" ? process.execPath.replaceAll("\\", "/") : process.execPath;
   if (/\r|\n|\0|%s/u.test(executable) || executable.includes(delimiter)) {
@@ -300,9 +306,10 @@ export async function prepareAntigravityProfile(input: {
           // The CLI ignores AGY_ACP_FORCE_FILE_STORAGE and keeps one Google sign-in per computer in the OS keyring,
           // whatever --gemini-dir says. 1.5.14 and 1.5.15 keep each profile's in its file instead while they believe
           // they run over SSH. 1.5.16 ignores SSH_CONNECTION and uses the keychain whenever it can open one, unless
-          // AGY_CLI_FORCE_FILE_TOKEN_STORAGE is set (both measured on macOS). With both, every account here has its
-          // own sign-in, the keychain and the CLI in a terminal are never touched, and a box without a keyring works
-          // the same. SSH_CONNECTION is a fixed value, so no address of the host reaches the box.
+          // AGY_CLI_FORCE_FILE_TOKEN_STORAGE is set (both measured on macOS). With both, every account keeps its sign-in
+          // in its profile's file (the default account's is the terminal CLI's file in ~/.gemini), the keychain is never
+          // touched, and a box without a keyring works the same. SSH_CONNECTION is a fixed value, so no address of the
+          // host reaches the box.
           SSH_CONNECTION: ANTIGRAVITY_SSH_CONNECTION,
           AGY_CLI_FORCE_FILE_TOKEN_STORAGE: "1",
         }
@@ -792,7 +799,7 @@ export function antigravityCliTakesHttpMcp(initialized: unknown): boolean {
 /** The agy CLI has no harness sibling and serves ACP through its `acp` subcommand. It joins `--app-data-dir` beneath
  * `--gemini-dir`, including when the value is absolute. */
 export function antigravityLaunchArgs(runtime: Pick<AntigravityRuntime, "harnessPath">, profileDirectory: string, platform: NodeJS.Platform = process.platform): string[] {
-  if (runtime.harnessPath === null) return ["acp", "--gemini-dir", profileDirectory, "--app-data-dir", "antigravity-acp"];
+  if (runtime.harnessPath === null) return ["acp", "--gemini-dir", profileDirectory, "--app-data-dir", antigravityAppDataDir(profileDirectory)];
   return platform === "linux" ? ["--uid="] : [];
 }
 

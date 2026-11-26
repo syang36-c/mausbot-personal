@@ -25,6 +25,7 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { AcpReportedFailure } from "./acp/failure-words.ts";
+import { antigravityAppDataDir } from "./antigravity-cli-install.ts";
 import { engineFailure } from "./engine-errors.ts";
 
 // CORTEX_STEP_TYPE_ERROR_MESSAGE in the native trajectory.
@@ -62,7 +63,6 @@ const MAX_LOG_BYTES = 256 * 1024 * 1024;
 const MAX_STEP_BYTES = 1024 * 1024;
 // Google's longest window is a week; a reset further off, or not in the future, is not a reset time.
 const MAX_RESET_AHEAD_MS = 8 * 24 * 3_600_000;
-const CONVERSATION_SEGMENTS = ["antigravity-acp", "conversations"];
 
 interface LastStep {
   type: number;
@@ -213,11 +213,12 @@ export async function watchAntigravityPromptOutcome(
   const stopReasonOf = (result: unknown) => (result as { stopReason?: unknown } | null)?.stopReason;
   const typedOnly: AntigravityPromptCheck = async (result) => antigravityTurnFailure(provider, stopReasonOf(result), undefined, now());
   if (!NATIVE_SESSION_ID.test(sessionId)) return typedOnly;
-  const segments = [...CONVERSATION_SEGMENTS, `${sessionId}.db`];
+  const conversations = [antigravityAppDataDir(profileDirectory), "conversations"];
+  const segments = [...conversations, `${sessionId}.db`];
   const before = await (async () => {
     const root = await realpath(profileDirectory).catch(() => undefined);
     if (root === undefined) return undefined;
-    if ((await managedPath(root, CONVERSATION_SEGMENTS, "directory")) === undefined) return undefined;
+    if ((await managedPath(root, conversations, "directory")) === undefined) return undefined;
     const database = await managedPath(root, segments, "file");
     // A path that exists but fails the proof is a link or other foreign entry.
     if (database === undefined) {

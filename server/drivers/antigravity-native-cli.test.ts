@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, symlinkSync, truncateSync, utimesSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as tar from "tar";
@@ -14,9 +14,11 @@ import { removeTempDir } from "../testing/cleanup.ts";
 import { recordEvents } from "../testing/events.ts";
 import {
   antigravityCliSessionMode,
+  antigravityCliTokenPath,
   antigravityLaunchArgs,
   isValidAntigravityInitializeResult,
   prepareAntigravityProfile,
+  removeAntigravityProfile,
   validateAntigravityRuntime,
 } from "./antigravity-acp.ts";
 import { activeAntigravityCli, isAntigravityCliName } from "./antigravity-cli-install.ts";
@@ -381,6 +383,22 @@ describe("starting the native CLI", () => {
     expect(cli.environment.GEMINI_HOME).toBe(cli.directory);
     const pair = await prepareAntigravityProfile({ instanceId: "pair", baseDir: directory, runtime: { executablePath: "/r/agy_acp_server.par", harnessPath: "/r/localharness_external", source: "managed", version: "1.4.3" } });
     expect(pair.environment.ANTIGRAVITY_HARNESS_PATH).toBe("/r/localharness_external");
+  });
+
+  it("runs the default account in the CLI's own home with the terminal's sign-in, and leaves that home's settings alone", async () => {
+    const home = join(homedir(), ".gemini"), settings = join(home, "antigravity-cli", "settings.json");
+    mkdirSync(dirname(settings), { recursive: true });
+    writeFileSync(settings, "the person's own\n");
+    const runtime = { executablePath: "/cli/antigravity", harnessPath: null, source: "path", version: "1.5.17" } as const;
+    const profile = await prepareAntigravityProfile({ instanceId: "antigravity", runtime });
+    expect(profile.directory).toBe(home);
+    expect(antigravityLaunchArgs(runtime, profile.directory)).toEqual(["acp", "--gemini-dir", home, "--app-data-dir", "antigravity-cli"]);
+    expect(antigravityCliTokenPath("antigravity")).toBe(join(home, "antigravity-cli", "antigravity-oauth-token"));
+    expect(readFileSync(settings, "utf8")).toBe("the person's own\n");
+    expect(existsSync(join(home, "antigravity-acp"))).toBe(false);
+    await removeAntigravityProfile("antigravity");
+    expect(existsSync(settings)).toBe(true);
+    expect(antigravityCliTokenPath("antigravity-added")).not.toContain(home);
   });
 
   it("knows the CLI by its names and by the name it gives itself", () => {

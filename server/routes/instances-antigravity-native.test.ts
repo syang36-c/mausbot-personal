@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AppConfig } from "../config.ts";
 import type { InstanceConfigMap } from "../contracts.ts";
-import { antigravityProfileDirectory } from "../drivers/antigravity-acp.ts";
+import { antigravityCliTokenPath, antigravityProfileDirectory } from "../drivers/antigravity-acp.ts";
 import { AntigravityDriver } from "../drivers/antigravity.ts";
 import { ENGINE_LIST_REUSE_MS, ProviderRegistry } from "../harness/registry.ts";
 import { json, readBody } from "../harness/http.ts";
@@ -167,7 +167,7 @@ describe.skipIf(WINDOWS)("the native Antigravity CLI through the instance routes
     expect(started()).toBe(settled);
 
     // The sign-in is removed outside the app: the next turn is refused, and the status says so.
-    rmSync(join(antigravityProfileDirectory("antigravity"), "antigravity-acp", "antigravity-oauth-token"));
+    rmSync(antigravityCliTokenPath("antigravity"));
     const recorder = recordEvents(instance.adapter);
     const { turnId } = await instance.adapter.sendTurn({ threadId: "refused", text: "hello", approvalMode: "ask", cwd: fixture.directory });
     expect(await recorder.until((event) => event.type === "turn.completed" && event.turnId === turnId, 30_000)).toMatchObject({ ok: false, stopReason: "auth_required" });

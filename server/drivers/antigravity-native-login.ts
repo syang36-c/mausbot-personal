@@ -10,6 +10,7 @@ import { join } from "node:path";
 import { killCliTree, spawnCli } from "../procs.ts";
 import type { ProviderAuthenticationStart, ProviderAuthenticationStatus } from "../contracts.ts";
 import { STARTUP_TIMEOUT_MS, type AntigravityProfile } from "./antigravity-acp.ts";
+import { antigravityAppDataDir } from "./antigravity-cli-install.ts";
 import type { AntigravityRuntime } from "./antigravity-runtime.ts";
 
 export const ANTIGRAVITY_LOGIN_REDIRECT = "https://antigravity.google/oauth-callback";
@@ -33,7 +34,7 @@ const INACTIVE = "This Google sign-in is no longer active. Start again.";
 const STILL_RUNNING = "The Antigravity sign-in in progress could not be stopped. Try again.";
 
 export function antigravityLoginArgs(profileDirectory: string): string[] {
-  return ["acp", "--login", "--gemini-dir", profileDirectory, "--app-data-dir", "antigravity-acp"];
+  return ["acp", "--login", "--gemini-dir", profileDirectory, "--app-data-dir", antigravityAppDataDir(profileDirectory)];
 }
 
 /** The authorization link in what the CLI printed, found by its shape and not its wording: the first address in full,
