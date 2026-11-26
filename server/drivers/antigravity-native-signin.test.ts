@@ -14,6 +14,12 @@ import { recordEvents } from "../testing/events.ts";
 import { antigravityProfileDirectory, antigravityTokenPath } from "./antigravity-acp.ts";
 import { AntigravityDriver } from "./antigravity.ts";
 
+const searched = vi.hoisted(() => ({ path: null as string | null }));
+vi.mock("../env-path.ts", async (original) => {
+  const actual = await original<typeof import("../env-path.ts")>();
+  return { ...actual, augmentedPath: () => searched.path ?? actual.augmentedPath() };
+});
+
 const WINDOWS = process.platform === "win32";
 const LOGIN_NOTE = "Antigravity needs a Google account";
 const scratch: string[] = [];
@@ -316,8 +322,13 @@ describe.skipIf(WINDOWS)("signing in to the native Antigravity CLI", () => {
     it("fails, rather than pass as done, when an account set to the native CLI cannot start it", async () => {
       const instance = await create("antigravity-native-missing-cli", nativeFixture(folder()), {}, "antigravity");
       await expect(instance.signOut!()).rejects.toThrow(/Antigravity CLI is not installed/u);
-      const agy = await create("antigravity-native-agy-missing-cli", nativeFixture(folder()), { PATH: "/usr/bin:/bin" }, "agy");
-      await expect(agy.signOut!()).rejects.toThrow();
+      searched.path = "/usr/bin:/bin";
+      try {
+        const agy = await create("antigravity-native-agy-missing-cli", nativeFixture(folder()), {}, "agy");
+        await expect(agy.signOut!()).rejects.toThrow();
+      } finally {
+        searched.path = null;
+      }
       const moved = nativeFixture(folder());
       const custom = await create("antigravity-native-moved-cli", moved);
       renameSync(moved.executable, join(moved.directory, "moved-away"));

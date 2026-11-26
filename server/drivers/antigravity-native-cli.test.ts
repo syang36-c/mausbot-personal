@@ -435,6 +435,16 @@ describe.skipIf(WINDOWS)("a native CLI set as the engine's own path", () => {
     expect(existsSync(started)).toBe(false);
   });
 
+  it("takes Google's installed CLI from PATH under its installer's name agy, from 1.5.0 on", async () => {
+    const directory = folder(), agy = join(directory, "agy");
+    writeFileSync(agy, "#!/bin/sh\necho 1.5.17\n");
+    chmodSync(agy, 0o755);
+    await expect(resolveAntigravityRuntime(undefined, { PATH: directory }, folder()))
+      .resolves.toEqual({ executablePath: agy, harnessPath: null, source: "path", version: "1.5.17" });
+    writeFileSync(agy, "#!/bin/sh\necho 1.4.9\n");
+    await expect(resolveAntigravityRuntime(undefined, { PATH: directory }, folder())).rejects.toThrow();
+  });
+
   it("is asked its version without the server's, the workspace's or a provider's credentials", async () => {
     const directory = folder(), seen = join(directory, "env"), program = join(directory, "antigravity");
     writeFileSync(program, `#!/bin/sh\n/usr/bin/env > ${JSON.stringify(seen)}\necho 1.5.7\n`);

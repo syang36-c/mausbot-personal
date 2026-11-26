@@ -227,6 +227,20 @@ async function externalRuntime(candidate: string, source: "override" | "path", e
   return version === null ? null : { executablePath, harnessPath: null, source, version };
 }
 
+/** Google's installer puts the native CLI on PATH as `agy`; the version probe tells it from the pre-1.5 launcher of that name. */
+const PATH_CLI_NAMES = process.platform === "win32" ? ["agy.exe", "antigravity.exe"] : ["agy", "antigravity"];
+
+async function pathNativeCli(env: NodeJS.ProcessEnv): Promise<AntigravityRuntime | null> {
+  for (const name of PATH_CLI_NAMES) {
+    for (const executablePath of pathCandidates(name, env)) {
+      if (!(await executableFile(executablePath))) continue;
+      const version = await nativeCliVersion(executablePath, env).catch(() => null);
+      if (version) return { executablePath, harnessPath: null, source: "path", version };
+    }
+  }
+  return null;
+}
+
 /** Whether the engine's CLI path asks for the native CLI this app installs: the bare name, as the CLI itself is named. */
 export function isAntigravityNativeAlias(cli: string | undefined): boolean {
   const name = cli?.trim() ?? "";
@@ -306,6 +320,8 @@ export async function resolveAntigravityRuntime(
     if (managed) return managed;
   }
   if (installedCli) return installedCli;
+  const onPath = ANTIGRAVITY_NATIVE_CLI && !pinnedOnly ? await pathNativeCli(env) : null;
+  if (onPath) return onPath;
   const names = executableNames();
   for (const candidate of pinnedOnly ? [] : pathCandidates(names.executable, env)) {
     const found = await externalRuntime(candidate, "path");
