@@ -2555,7 +2555,6 @@
   "about.connectedTo": "Connected to {name} · version {version}",
   "sidebar.menu.shortcuts": "Keyboard shortcuts",
   "sidebar.menu.help": "Help Center",
-  "sidebar.menu.feedback": "Send feedback",
   "sidebar.menu.usageUsed": "{percent}% used",
   "sidebar.menu.resets": "Resets {when}",
   "sidebar.menu.switchTo": "Switch to…",

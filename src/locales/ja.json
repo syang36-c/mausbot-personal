@@ -2095,7 +2095,6 @@
   "about.connectedTo": "{name} に接続中 · バージョン {version}",
   "sidebar.menu.shortcuts": "キーボードショートカット",
   "sidebar.menu.help": "ヘルプセンター",
-  "sidebar.menu.feedback": "フィードバックを送る",
   "sidebar.menu.usageUsed": "{percent}% 使用",
   "sidebar.menu.resets": "{when} にリセット",
   "sidebar.menu.switchTo": "切り替え先…",

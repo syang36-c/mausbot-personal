@@ -1893,7 +1893,6 @@
   "sidebar.menu.about": "О программе",
   "sidebar.menu.shortcuts": "Сочетания клавиш",
   "sidebar.menu.help": "Центр помощи",
-  "sidebar.menu.feedback": "Отправить отзыв",
   "sidebar.update.startingDownload": "Начинаем загрузку…",
   "sidebar.update.downloading": "Загрузка… {percent}%",
   "sidebar.update.installing": "Перезапуск для обновления…",

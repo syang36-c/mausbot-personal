@@ -1989,7 +1989,6 @@
   "about.connectedTo": "{name}에 연결됨 · 버전 {version}",
   "sidebar.menu.shortcuts": "키보드 단축키",
   "sidebar.menu.help": "도움말 센터",
-  "sidebar.menu.feedback": "피드백 보내기",
   "sidebar.menu.usageUsed": "{percent}% 사용",
   "sidebar.menu.resets": "{when} 초기화",
   "sidebar.menu.switchTo": "전환…",

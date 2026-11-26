@@ -1848,7 +1848,6 @@
   "about.connectedTo": "Połączono z: {name} · wersja {version}",
   "sidebar.menu.shortcuts": "Skróty klawiszowe",
   "sidebar.menu.help": "Centrum pomocy",
-  "sidebar.menu.feedback": "Wyślij opinię",
   "sidebar.update.startingDownload": "Rozpoczynanie pobierania…",
   "sidebar.update.downloading": "Pobieranie… {percent}%",
   "sidebar.update.installing": "Uruchamianie ponownie w celu aktualizacji…",

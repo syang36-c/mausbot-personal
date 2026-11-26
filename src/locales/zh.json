@@ -2347,7 +2347,6 @@
   "about.connectedTo": "已连接到 {name} · 版本 {version}",
   "sidebar.menu.shortcuts": "键盘快捷键",
   "sidebar.menu.help": "帮助中心",
-  "sidebar.menu.feedback": "发送反馈",
   "sidebar.menu.usageUsed": "已用 {percent}%",
   "sidebar.menu.resets": "距重置 {when}",
   "sidebar.menu.switchTo": "切换到…",

@@ -261,7 +261,7 @@ describe("the outer menu", () => {
     header: { name: "Ada Lovelace", line: "Not signed in", avatar: null, onOpen: () => {} },
     plan: { key: "plan", label: "Plan & billing", onSelect: () => {} },
     ...(simple ? { simple: { tools: [{ key: "automations", label: "Automations", onSelect: () => {} }] } } : {}),
-    onSettings: () => {}, onShortcuts: () => {}, onAbout: () => {}, onHelp: () => {}, onFeedback: () => {},
+    onSettings: () => {}, onShortcuts: () => {}, onAbout: () => {}, onHelp: () => {},
   }).map((item) => item.key);
 
   it("puts your account first, then Phone & devices and Settings, in both modes", () => {
@@ -274,7 +274,7 @@ describe("the outer menu", () => {
       phone: { key: "phone-devices", label: "Phone & devices", onSelect: () => {} }, update: null,
       header: { name: "Ada Lovelace", line: "Not signed in", avatar: null, onOpen: () => {} },
       plan: { key: "plan", label: "Plan & billing", onSelect: () => {} },
-      onSettings: () => {}, onShortcuts: () => {}, onAbout: () => {}, onHelp: () => {}, onFeedback: () => {},
+      onSettings: () => {}, onShortcuts: () => {}, onAbout: () => {}, onHelp: () => {},
     });
     expect(rows.find((item) => item.key === "plan")?.separatorBefore).toBeFalsy();
     expect(rows.find((item) => item.key === "support")?.separatorBefore).toBe(true);

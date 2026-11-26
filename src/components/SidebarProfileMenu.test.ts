@@ -23,7 +23,7 @@ import {
   updateLabel,
   updatePhase,
 } from "./SidebarProfileMenu";
-import { DOCS_URL, FEEDBACK_URL, HELP_CENTER_URL, platformLabel } from "@/lib/app-links";
+import { DOCS_URL, HELP_CENTER_URL, platformLabel } from "@/lib/app-links";
 import { profileForSession } from "@/lib/session";
 import {
   cloudPhoneDestination,
@@ -201,7 +201,6 @@ describe("outward links", () => {
   });
 
   it("sends Send Feedback to the Discord community", () => {
-    expect(FEEDBACK_URL).toBe("https://discord.gg/9Wb8MEpXRs");
   });
 });
 
@@ -300,7 +299,7 @@ describe("profileMenuItems", () => {
     update: null,
     header: { name: "Ada Lovelace", line: "Pro · ada@example.com", avatar: null, onOpen: noop },
     plan: { key: "plan", label: "Plan & billing", onSelect: noop },
-    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop, onFeedback: noop,
+    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop,
     ...patch,
   });
 
@@ -308,7 +307,7 @@ describe("profileMenuItems", () => {
     const items = build();
     expect(items.map((item) => item.key)).toEqual(["account", "phone-devices", "settings", "plan", "support"]);
     expect(items.filter((item) => item.separatorBefore).map((item) => item.key)).toEqual(["phone-devices", "support"]);
-    expect(items.find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "feedback", "about"]);
+    expect(items.find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "about"]);
     expect(items[0]).toMatchObject({ label: "Ada Lovelace", subtitle: "Pro · ada@example.com", large: true, chevron: true });
   });
 
@@ -318,7 +317,7 @@ describe("profileMenuItems", () => {
 
   it("keeps Check for updates in Help in both modes, and raises a ready update to the top", () => {
     const update = { key: "update", label: "Check for updates", onSelect: noop };
-    expect(build({ update }).find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "feedback", "update", "about"]);
+    expect(build({ update }).find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "update", "about"]);
     const raised = build({ update, updateTop: { label: "Update ready", action: "Restart" } });
     expect(raised[0]!.key).toBe("update");
     expect(raised[0]!.label).toBe("Update ready");
@@ -345,7 +344,7 @@ describe("Announcements in the profile menu", () => {
     update: null,
     header: { name: "Ada", line: "Not signed in", avatar: null, onOpen: noop },
     plan: { key: "plan", label: "Plan & billing", onSelect: noop },
-    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop, onFeedback: noop,
+    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop,
     ...patch,
   });
 
@@ -389,7 +388,7 @@ describe("Simple mode's account menu", () => {
     header: { name: "Ada", line: "Not signed in", avatar: null, onOpen: noop },
     plan: { key: "plan", label: "Plan & billing", onSelect: noop },
     simple: { tools },
-    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop, onFeedback: noop,
+    onSettings: noop, onShortcuts: noop, onAbout: noop, onHelp: noop,
     ...patch,
   });
   const groups = (items: SidebarMenuItem[]) => items.reduce<string[][]>((all, item) => {
@@ -407,7 +406,7 @@ describe("Simple mode's account menu", () => {
       ["plan"],
       ["support"],
     ]);
-    expect(items.find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "feedback", "update", "about"]);
+    expect(items.find((item) => item.key === "support")!.submenu!.map((item) => item.key)).toEqual(["help", "shortcuts", "update", "about"]);
   });
 
   it("raises an update that is ready or failed to its own top row with a pill, and keeps it out of support", () => {

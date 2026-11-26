@@ -2260,7 +2260,6 @@
   "about.connectedTo": "已連線到 {name} · 版本 {version}",
   "sidebar.menu.shortcuts": "鍵盤快速鍵",
   "sidebar.menu.help": "說明中心",
-  "sidebar.menu.feedback": "傳送意見回饋",
   "sidebar.menu.usageUsed": "已使用 {percent}%",
   "sidebar.menu.resets": "{when} 重設",
   "sidebar.menu.switchTo": "切換到…",

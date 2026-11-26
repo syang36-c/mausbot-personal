@@ -16,7 +16,6 @@ import {
   Loader2,
   LogOut,
   Megaphone,
-  MessageSquare,
   Sparkles,
   FolderTree,
   Hamburger,
@@ -56,7 +55,7 @@ import { cn } from "@/lib/cn";
 import { meterPercent, resetLine } from "@/lib/usage-meter";
 import type { CloudPlanSnapshot } from "../../electron/cloud-account.mjs";
 import { activeLocale, t } from "@/lib/i18n";
-import { FEEDBACK_URL, HELP_CENTER_URL, RELEASES_URL, appVersion, openExternalLink } from "@/lib/app-links";
+import { HELP_CENTER_URL, RELEASES_URL, appVersion, openExternalLink } from "@/lib/app-links";
 import { pageIsThisComputer } from "@/lib/companion-bridge";
 import { cloudPlanLabel } from "@/lib/cloud-plan";
 import { shortcutLabel } from "./ShortcutHint";
@@ -453,7 +452,6 @@ export function profileMenuItems({
   onShortcuts,
   onAbout,
   onHelp,
-  onFeedback,
   onWhatsNew,
   announcements = null,
   signOut = null,
@@ -475,7 +473,6 @@ export function profileMenuItems({
   onShortcuts: () => void;
   onAbout: () => void;
   onHelp: () => void;
-  onFeedback: () => void;
   onWhatsNew?: () => void;
   /** Announcements, with its red dot while one is new to the person */
   announcements?: { unread: boolean; onSelect: () => void; active: boolean } | null;
@@ -495,7 +492,6 @@ export function profileMenuItems({
     { key: "help", label: t("sidebar.menu.help"), icon: <HelpCircle size={16} />, onSelect: onHelp },
     ...(onWhatsNew ? [{ key: "whats-new", label: t("sidebar.menu.whatsNew"), icon: <Sparkles size={16} />, onSelect: onWhatsNew }] : []),
     { key: "shortcuts", label: t("sidebar.menu.shortcuts"), icon: <Keyboard size={16} />, trailing: keyHint(shortcutLabel("shortcuts-cheat-sheet")), onSelect: onShortcuts },
-    { key: "feedback", label: t("sidebar.menu.feedback"), icon: <MessageSquare size={16} />, onSelect: onFeedback },
     ...(update && !raised ? [{ ...update, separatorBefore: true }] : []),
     { key: "about", label: t("sidebar.menu.aboutApp", { app: productName() }), icon: <Info size={16} />, separatorBefore: !(update && !raised), onSelect: onAbout },
   ];
@@ -624,7 +620,6 @@ export function SidebarProfileMenu({ iconOnly = false, rail = false, circle = fa
     },
     onAbout: () => setAboutOpen(true),
     onHelp: () => void openExternalLink(HELP_CENTER_URL),
-    onFeedback: () => void openExternalLink(FEEDBACK_URL),
     onWhatsNew: () => void openExternalLink(RELEASES_URL),
     announcements: { unread: news.unread, active: state.activeView === "announcements", onSelect: () => dispatch({ type: "showAnnouncements" }) },
     // Every Sign out asks first: "Sign out of MausBot?" and what keeps running.

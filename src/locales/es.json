@@ -1691,7 +1691,6 @@
   "about.connectedTo": "Conectado a {name} · versión {version}",
   "sidebar.menu.shortcuts": "Atajos de teclado",
   "sidebar.menu.help": "Centro de ayuda",
-  "sidebar.menu.feedback": "Enviar comentarios",
   "sidebar.update.startingDownload": "Iniciando la descarga…",
   "sidebar.update.downloading": "Descargando… {percent}%",
   "sidebar.update.installing": "Reiniciando para actualizar…",
