@@ -42,8 +42,16 @@ releases, services or MausBot Cloud.
   connected-apps broker (`OMB_COMPOSIO_BROKER_URL`) or companion control plane
   (`OMB_CONTROL_PLANE_URL`): connected apps use the owner's Composio project
   key, and phones reach the server over Tailscale, the LAN or the owner's own
-  proxy. Usage analytics are gone: `track()` records nothing. Updates and the
-  update check read this fork's releases.
+  proxy. Usage analytics are gone: `track()` records nothing. Updates, the
+  update check, announcements, release notes and the model list read this
+  fork; the team library reads `syang36-c/openmausbot-teams`, and the Windows
+  browser engine downloads from this fork's `browser-engine-v*` release.
+- MausBot Cloud is off: `cloudOffersAllowed()` is false and the desktop's Cloud
+  client gets a fetch that refuses every request; `organization:begin` refuses
+  an `openmausbot.com` portal. Bug reports go nowhere unless
+  `OMB_BUG_REPORT_URL` is set.
+- `scripts/testing/no-upstream-hosts.test.ts` fails when a runtime file names
+  an upstream host; a file that must name one is listed there with why.
 - The owner's keys never reach a fixture or a test: the verification launcher
   gives its child a temporary data folder and passes only `FAKE_CLAUDE_*`
   through.
